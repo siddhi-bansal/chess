@@ -1,14 +1,14 @@
 import './Tile.css'
 
 interface Props {
-    color: string
+    color: string;
+    piece?: string;
 }
 
-export default function Tile({color}: Props) {
+export default function Tile({color, piece}: Props) {
     if (color === "black") {
-        return <div className="tile black-tile"></div>;
+        return <div className="tile black-tile"><img src={piece}/></div>;
     } else {
-        return <div className="tile white-tile"></div>;
-    }
-    
+        return <div className="tile white-tile"><img src={piece}/></div>;
+    }    
 }
