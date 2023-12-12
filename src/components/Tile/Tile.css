@@ -1,0 +1,13 @@
+
+.tile {
+    width: 75px;
+    height: 75px;
+}
+
+.black-tile {
+    background-color: lightpink;
+}
+
+.white-tile {
+    background-color: white;
+}
