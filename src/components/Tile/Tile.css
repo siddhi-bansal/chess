@@ -6,8 +6,24 @@
     height: 75px;
 }
 
+.tile .chess-piece {
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px;
+}
+
+.tile .chess-piece:hover {
+    cursor: grab;
+}
+
+.tile .chess-piece:active {
+    cursor: grabbing;
+}
+
 .black-tile {
-    background-color: lightpink;
+    background-color: rgb(230, 175, 216);
 }
 
 .white-tile {
