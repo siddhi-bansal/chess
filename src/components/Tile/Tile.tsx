@@ -1,11 +1,17 @@
 import './Tile.css'
 
 interface Props {
-    color: string;
     piece?: string;
+    idx_sum: number;
 }
 
-export default function Tile({color, piece}: Props) {
+export default function Tile({piece, idx_sum}: Props) {
+    let color = undefined;
+    if (idx_sum % 2 === 0) {
+        color = "white";
+    } else {
+        color = "black";
+    }
     if (color === "black") {
         return (
             <div className="tile black-tile">

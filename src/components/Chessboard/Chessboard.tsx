@@ -1,14 +1,44 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Chessboard.css'
 import Tile from "../Tile/Tile"
+import { assert } from 'console';
 
 const horizontal_axis = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const vertical_axis = ['1', '2', '3', '4', '5', '6', '7', '8'];
+const initial_board_state: Piece[] = [];
+
+interface Piece {
+    image: string;
+    x: number;
+    y: number;
+}
 
 export default function Chessboard() {
+    const [pieces, setPieces] = useState<Piece[]>(initial_board_state);
     const chessboardRef = useRef<HTMLDivElement>(null);
 
     let activePiece: HTMLElement | null = null;
+
+    for (let i = 0; i < 2; i++) {
+        const piece_color  = i === 0 ? "black" : "white";
+        const y = i === 0 ? 7 : 0;
+        console.log("im here");
+        // add all major pieces (rook, bishop, knight), queen, and king
+        initial_board_state.push({ image: `images/${piece_color}_rook.png`, x: 0, y})
+        console.log("im her pt 2");
+        initial_board_state.push({ image: `images/${piece_color}_rook.png`, x: 7, y})
+        initial_board_state.push({ image: `images/${piece_color}_bishop.png`, x: 1, y})
+        initial_board_state.push({ image: `images/${piece_color}_bishop.png`, x: 6, y})
+        initial_board_state.push({ image: `images/${piece_color}_knight.png`, x: 2, y})
+        initial_board_state.push({ image: `images/${piece_color}_knight.png`, x: 5, y})
+        initial_board_state.push({ image: `images/${piece_color}_queen.png`, x: 3, y})
+        initial_board_state.push({ image: `images/${piece_color}_king.png`, x: 4, y})
+
+        for (let j = 0; j < 8; j++) {
+            const pawn_y = y === 0 ? 1 : 6;
+            initial_board_state.push({ image: `images/${piece_color}_pawn.png`, x: j, y: pawn_y})
+        }
+    }
     
     /* Grabs piece and follows mouse's initial movement. */
     function grabPiece(e: React.MouseEvent) {
@@ -63,34 +93,30 @@ export default function Chessboard() {
     /* Drops piece at current location of mouse. */
     function dropPiece(e: React.MouseEvent) {
         if (activePiece) {
+            setPieces((value) => {
+                const pieces = value.map((p) => {
+                    if (p.x === 1 && p.y === 0) {
+                        p.x = 0;
+                    }
+                    return p;
+                });
+                return pieces;
+            })
             activePiece = null;
         }
     }
 
     let board = [];
-    for (let j = vertical_axis.length - 1; j >= 0; j--) {
-        for (let i = 0; i < horizontal_axis.length; i++) {
-            
-            let tile_color = "white"
-            if ((i + j) % 2 === 0) {tile_color = "black"}
-
-            let curr_image = undefined;
-            let piece_color = j < 4 ? "white" : "black";
-            
-            // add pawns
-            if (j === 1 || j === 6) {curr_image = `images/${piece_color}_pawn.png`;}
-
-            // add all other pieces
-            if (j === 0 || j === 7) {
-                if (i === 0 || i === 7) {curr_image = `images/${piece_color}_rook.png`;}
-                if (i === 1 || i === 6) {curr_image = `images/${piece_color}_knight.png`;}
-                if (i === 2 || i === 5) {curr_image = `images/${piece_color}_bishop.png`;}
-                if (i === 3) {curr_image = `images/${piece_color}_queen.png`;}
-                if (i === 4) {curr_image = `images/${piece_color}_king.png`;}
-            }
-
-            // add pieces to board
-            board.push(<Tile key={`${j},${i}`} piece={curr_image} color={tile_color}/>);
+    for (let i = vertical_axis.length - 1; i >= 0; i--) {
+        for (let j = horizontal_axis.length - 1; j >= 0; j--) {
+            const number = j + i + 2;
+            let image = undefined;
+            pieces.forEach((p) => {
+                if (p.x === j && p.y === i) {
+                    image = p.image;
+                }
+            });
+            board.push(<Tile key={`${i}, ${j}`} piece={image} idx_sum={i+j}/>)
         }
     }
 
