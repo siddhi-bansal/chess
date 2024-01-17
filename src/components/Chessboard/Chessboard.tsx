@@ -22,10 +22,8 @@ export default function Chessboard() {
     for (let i = 0; i < 2; i++) {
         const piece_color  = i === 0 ? "black" : "white";
         const y = i === 0 ? 7 : 0;
-        console.log("im here");
         // add all major pieces (rook, bishop, knight), queen, and king
         initial_board_state.push({ image: `images/${piece_color}_rook.png`, x: 0, y})
-        console.log("im her pt 2");
         initial_board_state.push({ image: `images/${piece_color}_rook.png`, x: 7, y})
         initial_board_state.push({ image: `images/${piece_color}_bishop.png`, x: 1, y})
         initial_board_state.push({ image: `images/${piece_color}_bishop.png`, x: 6, y})
@@ -92,12 +90,21 @@ export default function Chessboard() {
 
     /* Drops piece at current location of mouse. */
     function dropPiece(e: React.MouseEvent) {
-        if (activePiece) {
+        if (activePiece && chessboardRef.current) {
+            console.log("e client x, y: ", e.clientX, e.clientY);
+            // const chessboard_x = e.clientX - chessboardRef.current.offsetLeft;
+            // const chessboard_y = e.clientY - chessboardRef.current.offsetTop;
+            // const new_x = 80*Math.floor(chessboard_x / 80);
+            // const new_y = 80*Math.floor(chessboard_y / 80);
+            // console.log(chessboard_x, chessboard_y);
+            // console.log("hi", new_x, new_y);
             setPieces((value) => {
                 const pieces = value.map((p) => {
-                    if (p.x === 1 && p.y === 0) {
-                        p.x = 0;
-                    }
+                // if (p.x == 1 && p.y == 0) {
+                //     p.x = 7 - Math.floor(new_x / 80);
+                //     p.y = 7 - Math.floor(new_y / 80);
+                //     console.log(p.x, p.y);
+                // }
                     return p;
                 });
                 return pieces;
